@@ -12,14 +12,15 @@
             --border-color: rgba(255, 255, 255, 0.07);
             --text-main: #f3f3f5;
             --text-muted: #8a8a98;
-            --accent-pink: #ff2e93;
-            --accent-glow: rgba(255, 46, 147, 0.35);
             --success-green: #00e676;
             --warning-yellow: #ffd600;
             --error-red: #ff1744;
             --error-glow: rgba(255, 23, 68, 0.4);
-            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --sidebar-width: 240px;
+            
+            /* Dynamic Theme Placeholders - Hydrated via Javascript */
+            --accent-pink: #ff2e93;
+            --accent-glow: rgba(255, 46, 147, 0.35);
         }
 
         * {
@@ -32,7 +33,7 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            font-family: var(--font-stack);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
             min-height: 100vh;
             height: 100vh;
@@ -84,10 +85,10 @@
             width: 32px;
             height: 32px;
             border-radius: 8px;
-            background: rgba(255, 46, 147, 0.05);
-            border: 1px solid rgba(255, 46, 147, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
             color: var(--accent-pink);
-            filter: drop-shadow(0 0 4px var(--accent-pink));
+            filter: drop-shadow(0 0 4px var(--accent-glow));
             transition: transform 0.2s;
             flex-shrink: 0;
         }
@@ -130,7 +131,7 @@
 
         .nav-item.active {
             border-left: 3px solid var(--accent-pink);
-            background: rgba(255, 46, 147, 0.06);
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
@@ -181,7 +182,42 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .top-header { margin-bottom: 16px; flex-shrink: 0; }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Glassmorphic Sliding Mode Selector Tab Toggle */
+        .mode-toggle-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .mode-pill {
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 7px;
+            color: var(--text-muted);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .mode-pill.active-mode {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
 
         .dashboard-grid {
             display: grid;
@@ -250,7 +286,7 @@
             letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
         }
         .state-badge .indicator-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
-        .state-running .indicator-dot { background: var(--accent-pink); box-shadow: 0 0 8px var(--accent-pink); }
+        .state-running .indicator-dot { background: var(--accent-pink); box-shadow: 0 0 8px var(--accent-glow); }
         .state-stopped .indicator-dot { background: var(--warning-yellow); }
         .state-reset .indicator-dot { background: var(--text-muted); }
         .state-overtime .indicator-dot { background: var(--error-red); box-shadow: 0 0 8px var(--error-red); }
@@ -270,6 +306,12 @@
 
         /* Panels Controls Layouts */
         .sidebar-panel { display: flex; flex-direction: column; gap: 12px; }
+        
+        /* Subject tagging selectors matrix layout */
+        .subject-selector-block { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+        .sub-pill { padding: 8px; font-size: 0.8rem; font-weight: 600; text-align: center; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.01); cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+        .sub-pill.active-sub { background: rgba(255, 255, 255, 0.04); color: var(--text-main); border-color: var(--accent-pink); box-shadow: 0 0 10px var(--accent-glow); }
+
         .question-navigator { text-align: center; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid var(--border-color); }
         .q-title { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
         .q-number { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; color: var(--text-main); }
@@ -278,12 +320,12 @@
         .goals-container { display: flex; flex-direction: column; gap: 6px; }
         .goals-header { display: flex; justify-content: space-between; align-items: center; }
         .progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-pink), #651fff); border-radius: 4px; transition: width 0.3s; }
+        .progress-bar-fill { height: 100%; width: 0%; background: var(--accent-pink); border-radius: 4px; transition: width 0.3s; }
 
-        .notes-area { width: 100%; height: 95px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-family: var(--font-stack); font-size: 0.8rem; resize: none; outline: none; }
-        .notes-area:focus { border-color: rgba(255, 46, 147, 0.4); }
+        .notes-area { width: 100%; height: 95px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-family: inherit; font-size: 0.8rem; resize: none; outline: none; }
+        .notes-area:focus { border-color: var(--accent-pink); }
 
-        .motivation-ribbon { margin-top: 16px; padding: 12px; border-radius: 10px; background: rgba(255, 46, 147, 0.02); border: 1px solid rgba(255, 46, 147, 0.08); text-align: center; font-style: italic; font-weight: 500; font-size: 0.85rem; color: rgba(255,255,255,0.8); letter-spacing: 0.01em; flex-shrink: 0; }
+        .motivation-ribbon { margin-top: 16px; padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); text-align: center; font-style: italic; font-weight: 500; font-size: 0.85rem; color: rgba(255,255,255,0.8); letter-spacing: 0.01em; flex-shrink: 0; }
 
         /* Analytics Configurations */
         .analytics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 12px; }
@@ -315,7 +357,7 @@
         .report-header { text-align: center; margin-bottom: 16px; }
         .report-header h2 { font-size: 1.5rem; letter-spacing: -0.02em; }
         .grade-badge-container { display: flex; justify-content: center; margin: 12px 0; }
-        .grade-circle { width: 74px; height: 74px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-pink), #651fff); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 16px rgba(255, 46, 147, 0.4); }
+        .grade-circle { width: 74px; height: 74px; border-radius: 50%; background: var(--accent-pink); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 16px var(--accent-glow); }
         .grade-letter { font-size: 1.8rem; font-weight: 900; line-height: 1; }
         .grade-lbl { font-size: 0.6rem; text-transform: uppercase; opacity: 0.8; }
         .report-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
@@ -325,9 +367,9 @@
 
         .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 12px; }
         .badge-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0.3; filter: grayscale(1); transition: all 0.3s ease; }
-        .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: rgba(255, 46, 147, 0.25); background: linear-gradient(180deg, rgba(255, 46, 147, 0.02) 0%, rgba(15,15,22,0.75) 100%); }
+        .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--accent-pink); background: linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(15,15,22,0.75) 100%); }
         .badge-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
-        .badge-item.unlocked .badge-icon { background: rgba(255, 46, 147, 0.1); color: var(--accent-pink); filter: drop-shadow(0 0 4px var(--accent-pink)); }
+        .badge-item.unlocked .badge-icon { background: rgba(255,255,255,0.05); color: var(--accent-pink); filter: drop-shadow(0 0 4px var(--accent-glow)); }
         .badge-name { font-size: 0.8rem; font-weight: 700; }
         .badge-desc { font-size: 0.65rem; color: var(--text-muted); }
 
@@ -350,7 +392,7 @@
         .time-mask-container { display: flex; align-items: center; gap: 4px; }
         .mask-field { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 4px; border-radius: 4px; color: white; width: 34px; text-align: center; font-size: 0.85rem; font-family: monospace; }
         .mask-field:focus { border-color: var(--accent-pink); outline: none; }
-        .input-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; color: white; font-family: var(--font-stack); font-size: 0.85rem; width: 80px; text-align: center; }
+        .input-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; color: white; font-family: inherit; font-size: 0.85rem; width: 80px; text-align: center; }
     </style>
 </head>
 <body>
@@ -405,7 +447,13 @@
 
     <main>
         <div class="top-header">
-            <h1 style="font-size:1.3rem; font-weight:700; letter-spacing:-0.02em;">Focus Dashboard</h1>
+            <h1 style="font-size:1.3rem; font-weight:700; letter-spacing:-0.02em;">Workspace Matrix</h1>
+            
+            <!-- Dual Focus Mode Selector Switch Layout -->
+            <div class="mode-toggle-container">
+                <div class="mode-pill active-mode" id="mode-pill-question">Question Mode</div>
+                <div class="mode-pill" id="mode-pill-study">Study Mode</div>
+            </div>
         </div>
 
         <!-- VIEW: DASHBOARD WORKSPACE -->
@@ -459,18 +507,32 @@
                 </div>
 
                 <div class="sidebar-panel">
-                    <div class="question-navigator">
-                        <div class="q-title">Active Target</div>
-                        <div class="q-number" id="lbl-question-num">QUESTION #1</div>
-                        <div class="nav-buttons">
-                            <button class="btn" id="btn-prev-q">← Prev (🡨)</button>
-                            <button class="btn" id="btn-next-q">Next (🡪) →</button>
+                    <!-- Segment Cards Switch Layout Blocks handled programmatically -->
+                    <div id="panel-context-navigator" class="glass-card" style="padding:14px;">
+                        <!-- Question Mode Content Fragment -->
+                        <div id="frag-nav-question">
+                            <div class="q-title">Active Target</div>
+                            <div class="q-number" id="lbl-question-num">QUESTION #1</div>
+                            <div class="nav-buttons">
+                                <button class="btn" id="btn-prev-q">← Prev (🡨)</button>
+                                <button class="btn" id="btn-next-q">Next (🡪) →</button>
+                            </div>
+                        </div>
+                        <!-- Study Mode Content Fragment -->
+                        <div id="frag-nav-study" style="display:none; text-align:center;">
+                            <div class="q-title">Active Chapter Target</div>
+                            <div class="q-number" style="font-size:1.15rem; margin-bottom:6px; letter-spacing:0;" id="lbl-study-mode-header">Theory Block Tracker</div>
+                            <div class="subject-selector-block">
+                                <div class="sub-pill active-sub" id="sub-physics" onclick="setStudySubject('Physics')">Physics</div>
+                                <div class="sub-pill" id="sub-chemistry" onclick="setStudySubject('Chemistry')">Chem</div>
+                                <div class="sub-pill" id="sub-maths" onclick="setStudySubject('Mathematics')">Maths</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="glass-card goals-container">
                         <div class="goals-header">
-                            <span class="tag-title" style="margin:0;">Daily Target Progress</span>
+                            <span class="tag-title" id="lbl-target-heading" style="margin:0;">Daily Target Progress</span>
                             <span style="font-size:0.8rem; font-weight:700;" id="lbl-goal-progress">0 / 50</span>
                         </div>
                         <div class="progress-bar-bg">
@@ -668,7 +730,7 @@
 
 <script>
     // ─────────────────────────────────────────────────────────
-    // CONFIGURATION STORAGE MEMORY MAPPERS
+    // MASTER ARCHITECTURE LOG STORAGE LEDGERS
     // ─────────────────────────────────────────────────────────
     let appState = {
         stopwatchTime: 0,
@@ -691,7 +753,12 @@
         activeSessionQuestions: [], 
         historicalSessionsRegistry: [],
         unlockedBadgesRegistry: [],
-        questionTimeRegistryCache: {} 
+        questionTimeRegistryCache: {},
+        
+        // Mode Specific parameters tracking configurations
+        activeTimerMode: "Question", // Question or Study
+        activeStudySubject: "Physics",
+        studyModeAccumulatedMs: 0
     };
 
     let chronologicalTimestampMarker = null;
@@ -763,8 +830,24 @@
     ];
 
     // ─────────────────────────────────────────────────────────
-    // DATA RUNTIME MIGRATION SYSTEM
+    // DYNAMIC REFRESH AESTHETIC PALETTE SCHEMES
     // ─────────────────────────────────────────────────────────
+    const AESTHETIC_THEMES_POOL = [
+        { main: "#ff2e93", glow: "rgba(255, 46, 147, 0.35)" }, // Linear Pink
+        { main: "#00f0ff", glow: "rgba(0, 240, 255, 0.35)" },  // Arc Cyan
+        { main: "#ffd600", glow: "rgba(255, 214, 0, 0.35)" },  // Cyberpunk Amber
+        { main: "#00e676", glow: "rgba(0, 230, 118, 0.35)" },  // Emerald Matrix
+        { main: "#af4cff", glow: "rgba(175, 76, 255, 0.35)" }, // Nebula Purple
+        { main: "#ff1744", glow: "rgba(255, 23, 68, 0.35)" }   // Crimson Menace
+    ];
+
+    function hydrateDynamicApplicationTheme() {
+        // Pull random layout scheme from hand picked collection matrix on startup
+        let choice = AESTHETIC_THEMES_POOL[Math.floor(Math.random() * AESTHETIC_THEMES_POOL.length)];
+        document.documentElement.style.setProperty('--accent-pink', choice.main);
+        document.documentElement.style.setProperty('--accent-glow', choice.glow);
+    }
+
     function loadDataFromLocalCache() {
         let stored = localStorage.getItem('JEE_PRO_STATE_STORAGE_V3');
         if (!stored) {
@@ -792,13 +875,14 @@
         localStorage.setItem('JEE_PRO_STATE_STORAGE_V3', JSON.stringify(appState));
     }
 
-    // ─────────────────────────────────────────────────────────
-    // WORKSPACE EVENT BINDINGS
-    // ─────────────────────────────────────────────────────────
     function initializeDOMViewTriggers() {
         document.getElementById('sidebar-collapse-toggle').onclick = () => {
             document.getElementById('master-app-shell').classList.toggle('sidebar-collapsed');
         };
+
+        // Dual Mode Workspace Switch Toggles
+        document.getElementById('mode-pill-question').onclick = () => switchWorkspaceMode("Question");
+        document.getElementById('mode-pill-study').onclick = () => switchWorkspaceMode("Study");
 
         document.querySelectorAll('.nav-item').forEach(item => {
             item.onclick = () => {
@@ -827,7 +911,6 @@
             }
         };
 
-        // Configuration mutations handles
         document.getElementById('chk-genz-mode').onchange = (e) => { appState.genZMode = e.target.checked; saveDataToLocalCache(); };
         document.getElementById('chk-fomo-notif-mode').onchange = (e) => {
             appState.fomoNotificationsEnabled = e.target.checked;
@@ -845,7 +928,60 @@
             let val = parseInt(e.target.value) || 5;
             appState.notificationFrequencyMinutes = Math.max(1, Math.min(val, 30));
             saveDataToLocalCache();
+            if (backgroundSupervisorLoop) {
+                clearInterval(backgroundSupervisorLoop);
+                backgroundSupervisorLoop = setInterval(fireFomoAlertNotification, appState.notificationFrequencyMinutes * 60000);
+            }
         };
+    }
+
+    function switchWorkspaceMode(targetMode) {
+        if(appState.activeTimerMode === targetMode) return;
+        
+        // Save current clock states before changing contexts
+        if(appState.activeTimerMode === "Question") {
+            appState.questionTimeRegistryCache[appState.currentQuestionNumber] = appState.stopwatchTime;
+        } else {
+            appState.studyModeAccumulatedMs = appState.stopwatchTime;
+        }
+
+        appState.activeTimerMode = targetMode;
+        
+        document.getElementById('mode-pill-question').classList.toggle('active-mode', targetMode === "Question");
+        document.getElementById('mode-pill-study').classList.toggle('active-mode', targetMode === "Study");
+        
+        document.getElementById('frag-nav-question').style.display = targetMode === "Question" ? "block" : "none";
+        document.getElementById('frag-nav-study').style.display = targetMode === "Study" ? "block" : "none";
+
+        // Restore target mode clock structures values natively
+        if(targetMode === "Question") {
+            appState.stopwatchTime = appState.questionTimeRegistryCache[appState.currentQuestionNumber] || 0;
+            document.getElementById('lbl-target-heading').innerText = "Daily Target Progress";
+        } else {
+            appState.stopwatchTime = appState.studyModeAccumulatedMs || 0;
+            document.getElementById('lbl-target-heading').innerText = "Theory Target Progress";
+        }
+
+        // Halt clock tracking loops to let the user manually choose to initialize
+        if(appState.timerState === "RUNNING" || appState.timerState === "OVERTIME") {
+            appState.timerState = "STOPPED";
+            document.getElementById('btn-toggle-timer').innerText = "Start";
+            document.getElementById('btn-toggle-timer').className = "btn btn-primary";
+            cancelAnimationFrame(stopwatchEngineInterval);
+        }
+
+        refreshUIWorkspaceComponents();
+        updateFlipClockUIDisplays();
+        let yL = appState.warningYellowLimitMs || 60000, rL = appState.overtimeRedLimitMs || 120000;
+        renderProgressRingUpdate(yL, rL);
+        saveDataToLocalCache();
+    }
+
+    function setStudySubject(subject) {
+        appState.activeStudySubject = subject;
+        document.querySelectorAll('.sub-pill').forEach(el => el.classList.remove('active-sub'));
+        document.getElementById(`sub-${subject.toLowerCase()}`).classList.add('active-sub');
+        saveDataToLocalCache();
     }
 
     function initializeTimeMaskInterceptors() {
@@ -888,9 +1024,6 @@
         document.getElementById(sId).value = String(s).padStart(2, '0');
     }
 
-    // ─────────────────────────────────────────────────────────
-    // NOTIFICATION ENGINE SYSTEM
-    // ─────────────────────────────────────────────────────────
     function requestSystemNotificationPermissions() {
         if (!("Notification" in window)) {
             alert("Notification API not supported by browser context.");
@@ -898,7 +1031,12 @@
         }
         Notification.requestPermission().then(permission => {
             if(permission === "granted") {
-                new Notification("JEE Focus Pro", { body: "Distraction supervisor armed." });
+                new Notification("JEE Focus Pro", { 
+                    body: "Everything is OK! Distraction engine supervisor online.",
+                    requireInteraction: false
+                });
+            } else {
+                alert("Please click the padlock icon in your browser address bar to manually reset permissions.");
             }
         });
     }
@@ -907,18 +1045,13 @@
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 if (appState.fomoNotificationsEnabled && Notification.permission === "granted") {
-                    // 1st Alert: Fires IMMEDIATELY on window change
                     fireFomoAlertNotification();
-                    
-                    // Subsequent Alerts: Uses custom frequency time loop selection bounds
                     let intervalPeriodMs = (appState.notificationFrequencyMinutes || 5) * 60000;
+                    if (backgroundSupervisorLoop) clearInterval(backgroundSupervisorLoop);
                     backgroundSupervisorLoop = setInterval(fireFomoAlertNotification, intervalPeriodMs); 
                 }
             } else {
-                if (backgroundSupervisorLoop) { 
-                    clearInterval(backgroundSupervisorLoop); 
-                    backgroundSupervisorLoop = null; 
-                }
+                if (backgroundSupervisorLoop) { clearInterval(backgroundSupervisorLoop); backgroundSupervisorLoop = null; }
             }
         });
     }
@@ -926,12 +1059,10 @@
     function fireFomoAlertNotification() {
         if (!document.hidden || !appState.fomoNotificationsEnabled || Notification.permission !== "granted") return;
         let phrase = DISTRACTION_FOMO_ALERTS[Math.floor(Math.random() * DISTRACTION_FOMO_ALERTS.length)];
-        new Notification("⚠️ AIR 1 IS STUDYING RIGHT NOW!", { body: phrase, tag: "fomo_distract_alert", requireInteraction: true });
+        let title = appState.activeTimerMode === "Question" ? "⚠️ AIR 1 IS STUDYING RIGHT NOW!" : "⚠️ YOUR COMPETITORS ARE MASTERING THE SYLLABUS!";
+        new Notification(title, { body: phrase, tag: "fomo_distract_alert", requireInteraction: true });
     }
 
-    // ─────────────────────────────────────────────────────────
-    // CHRONOLOGICAL TIMING SEQUENCES
-    // ─────────────────────────────────────────────────────────
     function toggleTimerStateEngine() {
         if (appState.isBreakActive) toggleBreakStateEngine();
         if (appState.timerState === "RESET" || appState.timerState === "STOPPED") {
@@ -945,7 +1076,8 @@
             document.getElementById('btn-toggle-timer').innerText = "Start";
             document.getElementById('btn-toggle-timer').className = "btn btn-primary";
             cancelAnimationFrame(stopwatchEngineInterval);
-            appState.questionTimeRegistryCache[appState.currentQuestionNumber] = appState.stopwatchTime;
+            if(appState.activeTimerMode === "Question") appState.questionTimeRegistryCache[appState.currentQuestionNumber] = appState.stopwatchTime;
+            else appState.studyModeAccumulatedMs = appState.stopwatchTime;
             saveDataToLocalCache();
         }
         refreshUIWorkspaceComponents();
@@ -967,7 +1099,8 @@
 
         let yellowLimit = appState.warningYellowLimitMs || 60000;
         let redLimit = appState.overtimeRedLimitMs || 120000;
-        if (appState.stopwatchTime >= redLimit) {
+        
+        if (appState.activeTimerMode === "Question" && appState.stopwatchTime >= redLimit) {
             if (appState.timerState !== "OVERTIME") { appState.timerState = "OVERTIME"; triggerDynamicPhraseUpdate("overtime"); }
         }
         updateFlipClockUIDisplays();
@@ -977,10 +1110,20 @@
 
     function renderProgressRingUpdate(yellowLimit, redLimit) {
         const circle = document.getElementById('progress-ring-circle');
+        if (!circle) return;
         const radius = circle.r.baseVal.value;
         const circumference = radius * 2 * Math.PI;
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
         let msPassed = appState.stopwatchTime;
+        
+        if(appState.activeTimerMode === "Study") {
+            // Study Mode: Gentle continuous background breathing ring animation color morphing
+            let percentage = (msPassed % 20000) / 20000;
+            circle.style.strokeDashoffset = circumference - (percentage * circumference);
+            circle.style.stroke = "var(--accent-pink)";
+            return;
+        }
+
         let percentage = Math.min(1, msPassed / yellowLimit);
         let strokeColor = "#00e676";
 
@@ -995,9 +1138,6 @@
         circle.style.stroke = strokeColor;
     }
 
-    // ─────────────────────────────────────────────────────────
-    // GRAPHICAL STRUCTURAL VISUAL FLIPS
-    // ─────────────────────────────────────────────────────────
     let cacheLastDigits = { hr: "", min: "", sec: "" };
     function updateFlipClockUIDisplays() {
         let netSecs = Math.floor(appState.stopwatchTime / 1000);
@@ -1023,9 +1163,6 @@
         setTimeout(() => { block.querySelector('.card-bottom span').innerText = nextValue; }, 150);
     }
 
-    // ─────────────────────────────────────────────────────────
-    // QUESTION LOG NAVIGATION HISTORY CACHING
-    // ─────────────────────────────────────────────────────────
     function navigateNextQuestion() {
         logCurrentQuestionToCache();
         appState.questionTimeRegistryCache[appState.currentQuestionNumber] = appState.stopwatchTime;
@@ -1068,6 +1205,7 @@
     }
 
     function logCurrentQuestionToCache() {
+        if(appState.activeTimerMode !== "Question") return;
         let durationSeconds = appState.stopwatchTime / 1000;
         if (durationSeconds <= 1) return;
         let existingIdx = appState.activeSessionQuestions.findIndex(q => q.questionNum === appState.currentQuestionNumber);
@@ -1083,7 +1221,8 @@
             appState.isBreakActive = true; appState.breakOccurrencesCount++;
             if (appState.timerState === "RUNNING" || appState.timerState === "OVERTIME") {
                 appState.timerState = "STOPPED"; cancelAnimationFrame(stopwatchEngineInterval);
-                appState.questionTimeRegistryCache[appState.currentQuestionNumber] = appState.stopwatchTime;
+                if(appState.activeTimerMode === "Question") appState.questionTimeRegistryCache[appState.currentQuestionNumber] = appState.stopwatchTime;
+                else appState.studyModeAccumulatedMs = appState.stopwatchTime;
             }
             document.getElementById('btn-toggle-break').innerText = "Ready to Work";
             document.getElementById('btn-toggle-break').className = "btn btn-primary";
@@ -1100,8 +1239,15 @@
     function refreshUIWorkspaceComponents() {
         document.getElementById('lbl-question-num').innerText = `QUESTION #${appState.currentQuestionNumber}`;
         let solvedThisSession = appState.activeSessionQuestions.length;
-        document.getElementById('lbl-goal-progress').innerText = `${solvedThisSession} / ${appState.dailyTarget}`;
-        document.getElementById('goal-progress-fill').style.width = `${Math.min((solvedThisSession / appState.dailyTarget) * 100, 100)}%`;
+        
+        if(appState.activeTimerMode === "Question") {
+            document.getElementById('lbl-goal-progress').innerText = `${solvedThisSession} / ${appState.dailyTarget}`;
+            document.getElementById('goal-progress-fill').style.width = `${Math.min((solvedThisSession / appState.dailyTarget) * 100, 100)}%`;
+        } else {
+            let minsStudies = Math.round(appState.stopwatchTime / 60000);
+            document.getElementById('lbl-goal-progress').innerText = `${minsStudies} min`;
+            document.getElementById('goal-progress-fill').style.width = `${Math.min((minsStudies / 60) * 100, 100)}%`;
+        }
 
         const zone = document.getElementById('timer-interactive-zone');
         const badge = document.getElementById('timer-state-display');
@@ -1119,11 +1265,15 @@
         }
         document.getElementById('stat-streak').innerText = `🔥 ${appState.streakCount} Days`;
         document.getElementById('stat-study-accumulated').innerText = formatMillisecondTime(appState.totalStudyAccumulated);
+        setStudySubject(appState.activeStudySubject);
     }
 
     function confirmAndResetStopwatch() {
-        if(confirm("Confirm action to clear current problem stopwatch clock?")) {
-            appState.stopwatchTime = 0; appState.questionTimeRegistryCache[appState.currentQuestionNumber] = 0;
+        if(confirm("Confirm action to clear current stopwatch matrix clock values?")) {
+            appState.stopwatchTime = 0; 
+            if(appState.activeTimerMode === "Question") appState.questionTimeRegistryCache[appState.currentQuestionNumber] = 0;
+            else appState.studyModeAccumulatedMs = 0;
+            
             appState.timerState = "RESET"; cancelAnimationFrame(stopwatchEngineInterval);
             document.getElementById('btn-toggle-timer').innerText = "Start";
             document.getElementById('btn-toggle-timer').className = "btn btn-primary";
@@ -1131,12 +1281,9 @@
         }
     }
 
-    // ─────────────────────────────────────────────────────────
-    // SESSION FINALIZATION & METRICS Payloads
-    // ─────────────────────────────────────────────────────────
     function terminateActiveSessionProcess() {
-        if(appState.activeSessionQuestions.length === 0 && appState.stopwatchTime < 5000) { alert("No focus records identified inside tracking trace limits."); return; }
-        if(!confirm("Are you prepared to finalize performance matrices and log this session?")) return;
+        if(appState.activeSessionQuestions.length === 0 && appState.stopwatchTime < 5000) { alert("No focus metrics logs processed inside active workspace tracking matrix parameters."); return; }
+        if(!confirm("Are you prepared to finalize performance report matrices?")) return;
         appState.timerState = "RESET"; cancelAnimationFrame(stopwatchEngineInterval); logCurrentQuestionToCache();
 
         let sessionTotalTime = appState.activeSessionQuestions.reduce((acc, q) => acc + q.duration, 0) * 1000;
@@ -1145,11 +1292,11 @@
         let overLimit = totalSolved - underLimit;
         let avgTime = totalSolved > 0 ? (sessionTotalTime / 1000) / totalSolved : 0;
 
-        let pack = { id: "session_" + Date.now(), dateString: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), totalSolved, solvedUnderLimit: underLimit, solvedOverLimit: overLimit, averageDurationSec: Math.round(avgTime), breaks: appState.breakOccurrencesCount, rawStudyTimeMs: sessionTotalTime };
+        let pack = { id: "session_" + Date.now(), dateString: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), totalSolved, solvedUnderLimit: underLimit, solvedOverLimit: overLimit, averageDurationSec: Math.round(avgTime), breaks: appState.breakOccurrencesCount, rawStudyTimeMs: appState.totalStudyAccumulated };
         pack.focusScore = computeActiveSessionFocusScore(pack); pack.gradeAlpha = determineSessionGradeAlpha(pack.focusScore);
         appState.historicalSessionsRegistry.unshift(pack);
 
-        appState.currentQuestionNumber = 1; appState.breakOccurrencesCount = 0; appState.activeSessionQuestions = []; appState.questionTimeRegistryCache = {};
+        appState.currentQuestionNumber = 1; appState.breakOccurrencesCount = 0; appState.activeSessionQuestions = []; appState.questionTimeRegistryCache = {}; appState.studyModeAccumulatedMs = 0;
         document.getElementById('txt-session-notes').value = "";
         evaluateBadgesUnlockCriteria(); saveDataToLocalCache(); refreshUIWorkspaceComponents(); updateFlipClockUIDisplays(); syncChronologicalDeltaEngine();
         displayReportCardModal(pack);
@@ -1178,12 +1325,9 @@
     }
     function closeReportCardModal() { document.getElementById('report-modal-sheet').classList.remove('active-modal'); }
 
-    // ─────────────────────────────────────────────────────────
-    // GRAPH RENDER CONTROLS (NATIVE CANVAS API)
-    // ─────────────────────────────────────────────────────────
     function renderAdvancedSystemCharts() {
         const comp = document.getElementById('comparison-container');
-        if(appState.historicalSessionsRegistry.length < 2) comp.innerHTML = `<div class="comp-card" style="grid-column:span 5; color:var(--text-muted); font-size: 0.8rem;">Log another session to unlock comparative metrics changes metrics charts indicators.</div>`;
+        if(appState.historicalSessionsRegistry.length < 2) comp.innerHTML = `<div class="comp-card" style="grid-column:span 5; color:var(--text-muted); font-size: 0.8rem;">Log another session layout to process structural vector timeline changes indicators.</div>`;
         else {
             let c = appState.historicalSessionsRegistry[0], p = appState.historicalSessionsRegistry[1];
             comp.innerHTML = `
@@ -1197,12 +1341,15 @@
         renderHeatmapActivityMatrix();
         let ds = [...appState.historicalSessionsRegistry].reverse().slice(-7); if(ds.length === 0) return;
         let labels = ds.map(d => d.dateString.split(' ')[0]);
-        drawNativeCanvasLineChart('chart-speed', ds.map(d => d.averageDurationSec), labels, "#ff1744");
-        drawNativeCanvasLineChart('chart-focus', ds.map(d => d.focusScore), labels, "#ff2e93");
-        drawNativeCanvasLineChart('chart-time', ds.map(d => Math.round(d.rawStudyTimeMs / 60000)), labels, "#00e676");
-        let netUnder = appState.historicalSessionsRegistry.reduce((a, s) => a + (s.solvedUnderLimit || 0), 0);
-        let netOver = appState.historicalSessionsRegistry.reduce((a, s) => a + (s.solvedOverLimit || 0), 0);
-        drawNativeCanvasPieChart('chart-compliance', [netUnder, netOver]);
+        
+        try {
+            drawNativeCanvasLineChart('chart-speed', ds.map(d => d.averageDurationSec), labels, "#ff1744");
+            drawNativeCanvasLineChart('chart-focus', ds.map(d => d.focusScore), labels, "var(--accent-pink)");
+            drawNativeCanvasLineChart('chart-time', ds.map(d => Math.round(d.rawStudyTimeMs / 60000)), labels, "#00e676");
+            let netUnder = appState.historicalSessionsRegistry.reduce((a, s) => a + (s.solvedUnderLimit || 0), 0);
+            let netOver = appState.historicalSessionsRegistry.reduce((a, s) => a + (s.solvedOverLimit || 0), 0);
+            drawNativeCanvasPieChart('chart-compliance', [netUnder, netOver]);
+        } catch(e) { console.warn("Canvas frames pipeline hold: ", e); }
     }
 
     function drawNativeCanvasLineChart(cId, pts, labels, strokeColor) {
@@ -1256,7 +1403,7 @@
                 if(weight === 1) cell.style.background = "rgba(255, 46, 147, 0.25)";
                 else if(weight === 2) cell.style.background = "rgba(255, 46, 147, 0.5)";
                 else if(weight >= 3) cell.style.background = "var(--accent-pink)";
-                cell.setAttribute('data-tooltip', `Matrix tracker active block index.`); gRow.appendChild(cell);
+                cell.setAttribute('data-tooltip', `Activity block node grid coordinate.`); gRow.appendChild(cell);
             }
             mBox.appendChild(gRow); el.appendChild(mBox);
         }
@@ -1318,20 +1465,20 @@
         if(!confirm(`Verify request: Wipe state properties [${m.toUpperCase()}]?`)) return;
         if(m === 'stopwatch') { appState.stopwatchTime = 0; appState.questionTimeRegistryCache[appState.currentQuestionNumber] = 0; appState.timerState = "RESET"; cancelAnimationFrame(stopwatchEngineInterval); }
         else if(m === 'study') appState.totalStudyAccumulated = 0;
-        else if(m === 'session') { appState.activeSessionQuestions = []; appState.currentQuestionNumber = 1; appState.breakOccurrencesCount = 0; appState.questionTimeRegistryCache = {}; }
+        else if(m === 'session') { appState.activeSessionQuestions = []; appState.currentQuestionNumber = 1; appState.breakOccurrencesCount = 0; appState.questionTimeRegistryCache = {}; appState.studyModeAccumulatedMs = 0; }
         else if(m === 'all') { localStorage.removeItem('JEE_PRO_STATE_STORAGE_V3'); window.location.reload(); return; }
         saveDataToLocalCache(); refreshUIWorkspaceComponents(); updateFlipClockUIDisplays(); syncChronologicalDeltaEngine();
     }
 
     function initializeKeyboardShortcuts() {
-        window.addEventListener('keydown', (e) => {
+        window.onkeydown = (e) => {
             if (document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT' || document.activeElement.classList?.contains('mask-field')) return;
             if (e.key === " ") { e.preventDefault(); toggleTimerStateEngine(); }
-            else if (e.key === "ArrowRight") navigateNextQuestion();
-            else if (e.key === "ArrowLeft") navigatePreviousQuestion();
+            else if (e.key === "ArrowRight" && appState.activeTimerMode === "Question") navigateNextQuestion();
+            else if (e.key === "ArrowLeft" && appState.activeTimerMode === "Question") navigatePreviousQuestion();
             else if (e.key.toUpperCase() === "F") toggleApplicationFullscreen();
             else if (e.key.toUpperCase() === "E") terminateActiveSessionProcess();
-        });
+        };
     }
 
     function toggleApplicationFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else document.exitFullscreen(); }
@@ -1343,8 +1490,9 @@
 
 <script>
     // ─────────────────────────────────────────────────────────
-    // MASTER RUNTIME INITIALIZATION PIPELINE
+    // SEQUENTIAL INITIALIZATION CONSOLIDATED PIPELINE
     // ─────────────────────────────────────────────────────────
+    hydrateDynamicApplicationTheme(); // Execute theme morph immediately on parse execution
     loadDataFromLocalCache();
     initializeDOMViewTriggers();
     initializeKeyboardShortcuts();
